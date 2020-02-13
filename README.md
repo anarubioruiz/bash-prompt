@@ -1,4 +1,6 @@
-# A bash prompt design
+# My bash prompt design
+
+![Example design](design.png)
 
 1. Clone this repository.
 2. Create a link to the `.bash-prompt` file in your home directory:
