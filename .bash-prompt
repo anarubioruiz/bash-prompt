@@ -1,11 +1,38 @@
+DEFAULT_BG="\[\e[49m\]"
+BLUE_BG="\[\e[104m\]"
+RED_BG="\[\e[101m\]"
+DARKGRAY_BG="\[\e[100m\]"
+LIGHTGRAY_BG="\[\e[47m\]"
+
+DEFAULT_FG="\[\e[39m\]"
+WHITE_FG="\[\e[97m\]"
+YELLOW_FG="\[\e[93m\]"
+BLUE_FG="\[\e[94m\]"
+
+NORMAL="\[\e[0m\]"
+BOLD="\[\e[1m\]"
+BLINK="\[\e[5m\]"
+
 
 function prompt-return-code {
-    EXIT="$?"
-    P1_RCODE="\e[1;42m ✔" # green tick
+    local err_code="$?"
+    P1_RCODE="${BOLD}${BLUE_BG}${WHITE_FG} ✔ "
 
-    if [ $EXIT != 0 ]; then
-        P1_RCODE="\e[1;41m ✘ $EXIT" # red x with error status    
+    if [ $err_code != 0 ]; then
+        P1_RCODE="${BOLD}${RED_BG}${WHITE_FG} ✘  ${BLINK}$err_code"  
     fi
+}
+
+function prompt-date {
+    P1_DATE="${NORMAL}${DARKGRAY_BG}${YELLOW_FG}  `date +%H:%M`"
+}
+
+function prompt-userhost {
+    local user="${BOLD}${DARKGRAY_BG}${WHITE_FG}\u"
+    local separator="${BOLD}${DARKGRAY_BG}${YELLOW_FG}⋄"
+    local host="${BOLD}${DARKGRAY_BG}${WHITE_FG}\h"
+
+    P1_USERHOST=" $user $separator $host "
 }
 
 # http://stackoverflow.com/a/1862762
@@ -23,25 +50,24 @@ function prompt-last-cmd-time {
 
     P1_TIME=
     if [[ $elapsed_time -gt 1 ]]; then
-	    P1_TIME="⧖${elapsed_time}"
+	    P1_TIME="${NORMAL}${DARKGRAY_BG}${YELLOW_FG}${elapsed_time}s"
     fi
 }
 
+function prompt-cwd {
+    local cwd="${NORMAL}${DEFAULT_BG}${DEFAULT_FG}\w"
+    local char="${NORMAL}${DEFAULT_BG}${DEFAULT_FG}➤"
+    P1_CWD="${cwd} ${char} "
+}
+
 function set-prompt {
-
     prompt-return-code
+    prompt-date
+    prompt-userhost
     prompt-last-cmd-time
+    prompt-cwd
 
-    PS1="\n" # begin with a newline
-    PS1+="$P1_RCODE" # runtime of last command
-    PS1+=" \e[0;100;93m `date +%H:%M`"
-
-    PSCHAR="➤"
-    PS1+=" \e[1;32m\u ⋆ \h " # non-root: green hostname
-
-    PS1+=" \e[0;100;93m${P1_TIME}" # runtime of last command
-    PS1+=" \e[0m\n\w ${PSCHAR} " # prompt in new line
-
+    PS1="\n$P1_RCODE $P1_DATE $P1_USERHOST ${P1_TIME} \n${P1_CWD}"
 }
 
 trap 'timer_start' DEBUG
