@@ -1,0 +1,47 @@
+
+function prompt-return-code {
+    EXIT="$?"
+    P1_RCODE="\e[1;42m ✔" # green tick
+
+    if [ $EXIT != 0 ]; then
+        P1_RCODE="\e[1;41m ✘ $EXIT" # red x with error status    
+    fi
+}
+
+# http://stackoverflow.com/a/1862762
+function timer_start {
+    timer=${timer:-$SECONDS}
+}
+
+function timer_stop {
+    elapsed_time=$(($SECONDS - $timer))
+    unset timer
+}
+
+function prompt-last-cmd-time {
+    timer_stop
+
+    P1_TIME=
+    if [[ $elapsed_time -gt 1 ]]; then
+	    P1_TIME="⧖${elapsed_time}"
+    fi
+}
+
+function set-prompt {
+
+    prompt-return-code
+    prompt-last-cmd-time
+
+    PS1="\n" # begin with a newline
+    PS1+="$P1_RCODE" # runtime of last command
+    PS1+=" \e[0;100;93m `date +%H:%M`"
+
+    PSCHAR="➤"
+    PS1+=" \e[1;32m\u ⋆ \h " # non-root: green hostname
+
+    PS1+=" \e[0;100;93m${P1_TIME}" # runtime of last command
+    PS1+=" \e[0m\n\w ${PSCHAR} " # prompt in new line
+
+}
+
+trap 'timer_start' DEBUG
