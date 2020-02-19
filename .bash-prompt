@@ -67,7 +67,7 @@ function set-prompt {
     prompt-last-cmd-time
     prompt-cwd
 
-    PS1="\n$P1_RCODE $P1_DATE $P1_USERHOST ${P1_TIME} \n${P1_CWD}"
+    PS1="\n$P1_RCODE $P1_DATE $P1_USERHOST ${P1_TIME} ${DEFAULT_BG}\n${P1_CWD}"
 }
 
 trap 'timer_start' DEBUG
