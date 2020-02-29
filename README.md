@@ -10,7 +10,7 @@ ln -s <repository_path>/.bash-prompt ~
 ```
 2. Add at the end of your `.bashrc` (located also in your home dir) the following:
 ```
-source .bash-prompt
+source /home/$(whoami)/.bash-prompt
 PROMPT_COMMAND="set-prompt ; $PROMPT_COMMAND"
 ```
 **DONE!**
