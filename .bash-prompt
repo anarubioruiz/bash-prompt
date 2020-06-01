@@ -38,7 +38,7 @@ function prompt-userhost {
     P1_USERHOST=" $user $separator $host "
 }
 
-https://gist.github.com/davidvilla/4541c13f7a53f65c04edc8893d9a8f3f
+# https://gist.github.com/davidvilla/4541c13f7a53f65c04edc8893d9a8f3f
 prompt-vcs () {
     P1_VCS=
     prompt-hg-branch
