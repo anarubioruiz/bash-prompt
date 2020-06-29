@@ -1,4 +1,4 @@
-# My bash prompt design
+# Bash prompt design
 
 ![Example design](design.png)
 
