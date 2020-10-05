@@ -62,7 +62,7 @@ prompt-git-branch () {
     local status=
     local branch=
 
-    branch=$(git describe --contains --all HEAD 2> /dev/null)
+    branch=$(git branch --show-current 2> /dev/null)
     [[ $? -ne 0 ]] && return
 
     if git status --porcelain | grep -v "^??" &> /dev/null; then
